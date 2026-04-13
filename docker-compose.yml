@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: taskflow_nitin_pasricha_production
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init-secondary-databases.sql:/docker-entrypoint-initdb.d/02-secondary-databases.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d taskflow_nitin_pasricha_production"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  web:
+    build: .
+    ports:
+      - "${WEB_PORT:-3000}:80"
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/taskflow_nitin_pasricha_production
+      CACHE_DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/taskflow_nitin_pasricha_production_cache
+      QUEUE_DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/taskflow_nitin_pasricha_production_queue
+      CABLE_DATABASE_URL: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/taskflow_nitin_pasricha_production_cable
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      JWT_SECRET: ${JWT_SECRET}
+      SOLID_QUEUE_IN_PUMA: "true"
+      SEED_USER_PASSWORD: ${SEED_USER_PASSWORD:-password123}
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
