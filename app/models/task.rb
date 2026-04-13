@@ -6,7 +6,7 @@ class Task < ApplicationRecord
   belongs_to :creator, class_name: "User", inverse_of: :created_tasks
 
   enum :status, { todo: "todo", in_progress: "in_progress", done: "done" }, default: :todo, validate: true
-  enum :priority, { low: "low", medium: "medium", high: "high" }, default: :medium, validate: true
+  enum :priority, { low: "low", medium: "medium", high: "high" }, default: :low, validate: true
 
   validates :title, presence: true
 end
