@@ -6,6 +6,14 @@ module ApiErrors
 
   private
 
+  def render_not_found
+    render json: { error: "not found" }, status: :not_found
+  end
+
+  def render_forbidden
+    render json: { error: "forbidden" }, status: :forbidden
+  end
+
   def render_validation_failed(record)
     fields = {}
     record.errors.each do |error|
