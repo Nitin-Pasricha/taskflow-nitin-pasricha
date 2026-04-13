@@ -32,3 +32,6 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+# RSpec --only-failures / example status persistence
+/spec/examples.txt
+
