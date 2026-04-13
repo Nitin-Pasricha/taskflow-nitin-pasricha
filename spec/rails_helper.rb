@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-ENV["RAILS_ENV"] ||= "test"
+# Always use test for RSpec — do not inherit RAILS_ENV=production from shell or Docker workflows.
+ENV["RAILS_ENV"] = "test"
 ENV["JWT_SECRET"] ||= "test_jwt_secret_minimum_length_for_hs256"
 
 require "spec_helper"
