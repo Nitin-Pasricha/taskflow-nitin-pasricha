@@ -9,4 +9,11 @@ class Task < ApplicationRecord
   enum :priority, { low: "low", medium: "medium", high: "high" }, default: :low, validate: true
 
   validates :title, presence: true
+  validate :assignee_must_exist, if: -> { assignee_id.present? }
+
+  private
+
+  def assignee_must_exist
+    errors.add(:assignee_id, "is invalid") unless User.exists?(id: assignee_id)
+  end
 end

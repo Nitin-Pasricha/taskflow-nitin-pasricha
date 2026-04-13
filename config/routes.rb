@@ -8,5 +8,9 @@ Rails.application.routes.draw do
   post "auth/register", to: "auth#register"
   post "auth/login", to: "auth#login"
 
-  resources :projects, only: %i[index show create update destroy]
+  resources :projects, only: %i[index show create update destroy] do
+    resources :tasks, only: %i[index create]
+  end
+
+  resources :tasks, only: %i[update destroy]
 end

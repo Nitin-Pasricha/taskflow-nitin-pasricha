@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class ProjectsController < AuthenticatedController
+  include TaskPayload
+  include FilterValidation
+
   before_action :set_project, only: %i[show update destroy]
 
   def index
@@ -37,6 +40,8 @@ class ProjectsController < AuthenticatedController
   private
 
   def set_project
+    return unless uuid_path_param_valid?(params[:id], :id)
+
     @project = Project.includes(:tasks).find_by(id: params[:id])
     return render_not_found if @project.nil?
 
@@ -61,21 +66,5 @@ class ProjectsController < AuthenticatedController
     }
     data[:tasks] = project.tasks.order(:created_at).map { |t| task_payload(t) } if include_tasks
     data
-  end
-
-  def task_payload(task)
-    {
-      id: task.id,
-      title: task.title,
-      description: task.description,
-      status: task.status,
-      priority: task.priority,
-      project_id: task.project_id,
-      assignee_id: task.assignee_id,
-      creator_id: task.creator_id,
-      due_date: task.due_date&.iso8601,
-      created_at: task.created_at.iso8601(3),
-      updated_at: task.updated_at.iso8601(3)
-    }
   end
 end
