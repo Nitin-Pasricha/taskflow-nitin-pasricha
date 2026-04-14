@@ -125,7 +125,7 @@ The seeded project is named **TaskFlow Demo** and includes **three tasks** in **
 
 **Postman:** Import **`postman/taskflow-nitin-pasricha.postman_collection.json`**. Set the collection variable **`base_url`** to `http://localhost:3000`, run **Auth/login** (or register), then other requests (scripts can store `token`, `project_id`, `task_id`).
 
-**RSpec (optional backend bonus):** The brief lists integration tests as a **bonus**; this repo includes **request specs** that hit the real HTTP stack (`spec/requests/auth_spec.rb`, `projects_spec.rb`, `tasks_spec.rb`). Run them with **Ruby 3.2+** and PostgreSQL for the test database:
+**RSpec (optional backend bonus):** The brief lists integration tests as a **bonus**; this repo includes **request specs** that hit the real HTTP stack (`spec/requests/auth_spec.rb`, `projects_spec.rb`, `tasks_spec.rb`). Run them with **Ruby 3.3+** and PostgreSQL for the test database:
 
 ```bash
 bundle install
